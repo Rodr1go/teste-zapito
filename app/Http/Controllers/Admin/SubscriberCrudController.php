@@ -28,7 +28,7 @@ class SubscriberCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Subscriber::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/subscriber');
-        CRUD::setEntityNameStrings('subscriber', 'subscribers');
+        CRUD::setEntityNameStrings('subscriber', 'inscritos');
     }
 
     /**
@@ -39,13 +39,21 @@ class SubscriberCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // columns
-
+        // CRUD::setFromDb(); // columns
+    
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+        CRUD::addColumn(['name' => 'name', 'type' => 'string', 'label' => 'Nome']);
+        CRUD::addColumn(['name' => 'phone', 'type' => 'string', 'label' => 'Telefone']);
+        CRUD::addColumn([
+            'name' => 'status',
+            'type' => 'boolean',
+            'options' => [0 => 'Inativo', 1 => 'Ativo'],
+            'label' => 'Status'
+        ]);
     }
 
     /**
@@ -58,20 +66,22 @@ class SubscriberCrudController extends CrudController
     {
         CRUD::setValidation(SubscriberRequest::class);
 
-        CRUD::addField([
-            'name' => 'active',
-            'label' => 'Ativo/Inativo',
-            'type' => 'toggle',
-            'view_namespace' => 'toggle-field-for-backpack::fields',
-        ]);
+        //CRUD::setFromDb(); // fields
         
-        CRUD::setFromDb(); // fields
-
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
          */
+        CRUD::addField(['name' => 'name', 'type' => 'text', 'label' => 'Nome']);
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => 'Telefone']);
+        CRUD::addField([
+            'name' => 'status',
+            'label' => 'Ativar/Desativar',
+            'type' => 'toggle',
+            'default' => 1,
+            'view_namespace' => 'toggle-field-for-backpack::fields',
+        ]);
     }
 
     /**
@@ -83,5 +93,14 @@ class SubscriberCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+    
+    /**
+     * Define what happens when the Show operation is loaded
+     * @return void
+     */
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 }
