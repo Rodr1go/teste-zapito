@@ -23,6 +23,7 @@ php:
 # php artisan migrate
 # chmod -R 777 storage/
 # composer dump-autoload
+# php artisan backpack:install
 
 mysql:
 	@docker exec -ti teste-zapito-database mysql --user=$(DB_USERNAME) --password=$(DB_PASSWORD) --database=$(DB_DATABASE)
